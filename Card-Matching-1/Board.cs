@@ -7,23 +7,64 @@ class Board
     private Card _openCard2;
     public readonly int TotalSet;
 
-    public Board(int length, int width)
+    public Board(Difficulty difficulty, CardSkin cardSkin)
     {
+        switch (difficulty)
+        {
+            case Difficulty.Easy:
+                TotalSet = CreateBoard(2, 4, cardSkin);
+                break;
+            case Difficulty.Normal:
+                TotalSet = CreateBoard(4, 4, cardSkin);
+                break;
+            case Difficulty.Hard:
+                TotalSet = CreateBoard(6, 4, cardSkin);
+                break;
+        }
+    }
+
+    public void Reset()
+    {
+        Card.Num = 0;
+        Card.CardCount = 0;
+    }
+
+    public int CreateBoard(int  length, int width, CardSkin skin)
+    {
+        Random rand = new Random();
+        _board = new Card[length, width];
         int num = 0;
         int count = 0;
-        _board = new Card[length, width];
-        TotalSet = length * width / 2;
-        for(int i = 0; i < _board.GetLength(0); i++)
+        int colorNum = 0;
+        string color;
+
+        switch (skin)
         {
-            for(int j = 0; j < _board.GetLength(1); j++)
+            case CardSkin.Number:
+                num = 0;
+                break;
+            case CardSkin.Alphabet:
+                num = 'A' - 1;
+                break;
+            case CardSkin.Sign:
+                num = '\u25A0' - 1;
+                break;
+        }
+        for (int i = 0; i < _board.GetLength(0); i++)
+        {
+            for (int j = 0; j < _board.GetLength(1); j++)
             {
-                if((count++) % 2 == 0)
+                if ((count++) % 2 == 0)
                 {
+                    colorNum = rand.Next(15);
                     num++;
                 }
-                _board[i, j] = new Card(num);
+                color = ((Color)colorNum).ToString();
+                _board[i, j] = new Card(num, color);
             }
         }
+
+        return length * width / 2;
     }
 
     public bool OpenCard1(int x, int y)
@@ -113,7 +154,7 @@ class Board
 
     public bool CompareCard()
     {
-        if(_openCard1.Number == _openCard2.Number)
+        if(_openCard1.Text == _openCard2.Text)
         {
             _openCard1.TempHidden = true;
             _openCard2.TempHidden = true;
@@ -127,6 +168,6 @@ class Board
 
         }
 
-        return _openCard1.Number == _openCard2.Number;
+        return _openCard1.Text == _openCard2.Text;
     }
 }

@@ -7,6 +7,7 @@ class CardMatching
     private int _tryCount = 0;
     private int foundedSet = 0;
     private Difficulty _difficulty;
+    private CardSkin _skin;
     private bool _isWrong = false;
     private int _maxTry;
     private bool isClear;
@@ -15,25 +16,29 @@ class CardMatching
     public bool Start()
     {
         _difficulty = SelectDifficulty();
+        _skin = SelectCardSkin();
 
         switch (_difficulty)
         {
             case Difficulty.Easy:
-                _board = new Board(2, 4);
+                _board = new Board(_difficulty, _skin);
                 _maxTry = 10;
                 _waiting = 5000;
                 break;
             case Difficulty.Normal:
-                _board = new Board(4, 4);
+                _board = new Board(_difficulty, _skin);
                 _maxTry = 20;
                 _waiting = 3000;
                 break;
             case Difficulty.Hard:
-                _board = new Board(6, 4);
+                _board = new Board(_difficulty, _skin);
                 _maxTry = 30;
                 _waiting = 2000;
                 break;
         }
+
+
+
 
         _board.Shuffle();
 
@@ -131,8 +136,8 @@ class CardMatching
     {
         Console.WriteLine("난이도를 선택하세요:");
         Console.WriteLine("1. 쉬움 (2x4)");
-        Console.WriteLine("2. 쉬움 (4x4)");
-        Console.WriteLine("3. 쉬움 (4x6)");
+        Console.WriteLine("2. 보통 (4x4)");
+        Console.WriteLine("3. 어려움 (4x6)");
         while (true)
         {
             Console.Write("선택: ");
@@ -150,6 +155,29 @@ class CardMatching
 
     }
 
+    public CardSkin SelectCardSkin()
+    {
+        Console.WriteLine("카드 스킨을 선택하세요:");
+        Console.WriteLine("1. 숫자 (기본)");
+        Console.WriteLine("2. 알파벳 (컬러)");
+        Console.WriteLine("3. 기호 (컬러)");
+        while (true)
+        {
+            Console.Write("선택: ");
+            int choice = Convert.ToInt32(Console.ReadLine().Trim());
+
+            if (Enum.IsDefined(typeof(Difficulty), choice))
+            {
+                return (CardSkin)choice;
+            }
+            else
+            {
+                Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해 주시기 바랍니다.");
+            }
+        }
+
+    }
+
     public bool CheckNewGame()
     {
         string newGame = Console.ReadLine();
@@ -158,9 +186,9 @@ class CardMatching
 
         if (newGame == "Y")
         {
+            _board.Reset();
             Console.Clear();
             Console.WriteLine("=== 새 게임 ===\n");
-            Start();
             return true;
         }
         else

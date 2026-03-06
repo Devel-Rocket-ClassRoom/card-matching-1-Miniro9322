@@ -2,26 +2,42 @@
 
 class Card
 {
-    public int Number;
+    public string Text;
     public bool IsHidden;
     public bool TempHidden;
+    public static int CardCount = 0;
+    public static int Num;
+    public static int ColorNum;
+    public string _color;
 
-    public Card(int num)
+    public Card(int num, string color)
     {
-        Number = num;
+        if (num < 'A')
+        {
+            Text = num.ToString();
+        }
+        else
+        {
+            Text = ((char)num).ToString();
+        }
+        _color = color;
         IsHidden = true;
         TempHidden = true;
     }
-
+    
     public void PrintCard()
     {
         if(TempHidden == false)
         {
-            Console.Write($" [{Number}] ");
+            Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), _color);
+            Console.Write($" [{Text}] ");
+            Console.ResetColor();
         }
         else if (IsHidden == false)
         {
-            Console.Write($" {Number} ");
+            Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), _color);
+            Console.Write($" {Text} ");
+            Console.ResetColor();
         }
         else
         {
@@ -31,6 +47,8 @@ class Card
 
     public void ShowCard()
     {
-        Console.Write($" {Number} ");
+        Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), _color);
+        Console.Write($" {Text} ");
+        Console.ResetColor();
     }
 }

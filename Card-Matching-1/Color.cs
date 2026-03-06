@@ -1,0 +1,18 @@
+﻿enum Color
+{
+    Blue,
+    Cyan,
+    DarkBlue,
+    DarkCyan,
+    DarkGray,
+    DarkGreen,
+    DarkMagenta,
+    DarkRed,
+    DarkYellow,
+    Gray,
+    Green,
+    Magenta,
+    Red,
+    White,
+    Yellow
+}

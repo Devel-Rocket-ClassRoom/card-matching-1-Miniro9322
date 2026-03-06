@@ -10,12 +10,3 @@ do
 {
     isNewGame = game.Start();
 } while (isNewGame == true);
-
-
-
-enum Difficulty
-{
-    Easy = 1,
-    Normal =2,
-    Hard = 3
-}
