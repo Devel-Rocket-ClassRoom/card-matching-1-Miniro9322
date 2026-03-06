@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 class CardMatching
 {
@@ -9,8 +10,9 @@ class CardMatching
     private bool _isWrong = false;
     private int _maxTry;
     private bool isClear;
+    private int _waiting;
 
-    public void Start()
+    public bool Start()
     {
         _difficulty = SelectDifficulty();
 
@@ -19,18 +21,27 @@ class CardMatching
             case Difficulty.Easy:
                 _board = new Board(2, 4);
                 _maxTry = 10;
+                _waiting = 5000;
                 break;
             case Difficulty.Normal:
                 _board = new Board(4, 4);
                 _maxTry = 20;
+                _waiting = 3000;
                 break;
             case Difficulty.Hard:
                 _board = new Board(6, 4);
                 _maxTry = 30;
+                _waiting = 2000;
                 break;
         }
 
         _board.Shuffle();
+
+        _board.ShowAll();
+
+        Console.WriteLine($"잘 기억하세요! {_waiting/1000}초 후 뒤집힙니다");
+        Thread.Sleep(_waiting);
+        Console.Clear();
 
         while (true)
         {
@@ -91,20 +102,20 @@ class CardMatching
 
         Console.Write("새 게임을 하시겠습니까? (Y/N): ");
 
-        CheckNewGame();
+        return CheckNewGame();
     }
 
     private bool OpenCard(int num)
     {
         string open = Console.ReadLine();
-        string[] openNum = open.Split(" ");
+        string[] openNum = open.Trim().Split(" ");
         if(openNum.Length < 2)
         {
             Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해주시기 바랍니다.");
             return true;
         }
-        int x = Convert.ToInt32(openNum[0]);
-        int y = Convert.ToInt32(openNum[1]);
+        int x = Convert.ToInt32(openNum[0]) - 1;
+        int y = Convert.ToInt32(openNum[1]) - 1;
         switch (num)
         {
             case 0:
@@ -139,7 +150,7 @@ class CardMatching
 
     }
 
-    public void CheckNewGame()
+    public bool CheckNewGame()
     {
         string newGame = Console.ReadLine();
 
@@ -150,10 +161,12 @@ class CardMatching
             Console.Clear();
             Console.WriteLine("=== 새 게임 ===\n");
             Start();
+            return true;
         }
         else
         {
             Console.WriteLine("게임을 종료합니다.");
+            return false;
         }
     }
 }

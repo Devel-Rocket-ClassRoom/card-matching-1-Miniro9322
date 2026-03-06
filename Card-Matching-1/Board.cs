@@ -77,6 +77,23 @@ class Board
         }
     }
 
+    public void ShowAll()
+    {
+        Console.WriteLine("    1열 2열 3열 4열");
+
+        for (int i = 0; i < _board.GetLength(0); i++)
+        {
+            Console.Write($"{i + 1}행 ");
+
+            for (int j = 0; j < _board.GetLength(1); j++)
+            {
+                _board[i, j].ShowCard();
+            }
+
+            Console.WriteLine("\n");
+        }
+    }
+
     public void PrintBoard()
     {
         Console.WriteLine("    1열 2열 3열 4열");

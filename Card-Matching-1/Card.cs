@@ -28,4 +28,9 @@ class Card
             Console.Write(" ** ");
         }
     }
+
+    public void ShowCard()
+    {
+        Console.Write($" {Number} ");
+    }
 }
