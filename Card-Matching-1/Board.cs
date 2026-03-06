@@ -26,17 +26,34 @@ class Board
         }
     }
 
-    public void OpenCard1(int x, int y)
+    public bool OpenCard1(int x, int y)
     {
-        _openCard1 = _board[x, y];
-        _openCard1.TempHidden = false;
+        if (x < 0 || x > _board.GetLength(0) || y < 0 || y > _board.GetLength(1))
+        {
+            Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해 주세요.");
+            return true;
+        }
+        else
+        {
+            _openCard1 = _board[x, y];
+            _openCard1.TempHidden = false;
+            return false;
+        }   
     }
 
-    public void OpenCard2(int x, int y)
+    public bool OpenCard2(int x, int y)
     {
-        _openCard2 = _board[x, y];
-        _openCard2.TempHidden = false;
-
+        if(_board[x, y] == null)
+        {
+            Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해 주세요.");
+            return true;
+        }
+        else
+        {
+            _openCard2 = _board[x, y];
+            _openCard2.TempHidden = false;
+            return false;
+        }
     }
 
     public void Shuffle()
@@ -73,7 +90,7 @@ class Board
                 _board[i, j].PrintCard();
             }
 
-            Console.WriteLine();
+            Console.WriteLine("\n");
         }
     }
 
@@ -81,6 +98,8 @@ class Board
     {
         if(_openCard1.Number == _openCard2.Number)
         {
+            _openCard1.TempHidden = true;
+            _openCard2.TempHidden = true;
             _openCard1.IsHidden = false;
             _openCard2.IsHidden = false;
         }

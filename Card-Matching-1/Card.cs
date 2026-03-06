@@ -17,15 +17,15 @@ class Card
     {
         if(TempHidden == false)
         {
-            Console.Write($"[{Number}] ");
+            Console.Write($" [{Number}] ");
         }
         else if (IsHidden == false)
         {
-            Console.Write($"{Number} ");
+            Console.Write($" {Number} ");
         }
         else
         {
-            Console.Write("** ");
+            Console.Write(" ** ");
         }
     }
 }
