@@ -69,9 +69,14 @@ class Board
 
     public bool OpenCard1(int x, int y)
     {
-        if (x < 0 || x > _board.GetLength(0) || y < 0 || y > _board.GetLength(1))
+        if (x < 0 || x >= _board.GetLength(0) || y < 0 || y >= _board.GetLength(1))
         {
-            Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해 주세요.");
+            Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해 주세요.\n");
+            return true;
+        }
+        else if (_board[x,y].IsHidden == false)
+        {
+            Console.WriteLine("이미 오픈된 카드입니다. 다시 입력해 주세요.\n");
             return true;
         }
         else
@@ -84,9 +89,19 @@ class Board
 
     public bool OpenCard2(int x, int y)
     {
-        if(_board[x, y] == null)
+        if(x < 0 || x >= _board.GetLength(0) || y < 0 || y >= _board.GetLength(1))
         {
-            Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해 주세요.");
+            Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해 주세요.\n");
+            return true;
+        }
+        else if(_openCard1 == _board[x, y])
+        {
+            Console.WriteLine("이미 선택한 카드 입니다. 다시 입력해 주세요.\n");
+            return true;
+        }
+        else if (_board[x, y].IsHidden == false)
+        {
+            Console.WriteLine("이미 오픈된 카드입니다. 다시 입력해 주세요.\n");
             return true;
         }
         else
@@ -120,11 +135,11 @@ class Board
 
     public void ShowAll()
     {
-        Console.WriteLine("    1열 2열 3열 4열");
+        Console.WriteLine($"{" " , 4}{"1열" , 3}{"2열" , 3}{"3열" , 3}{"4열" , 3}");
 
         for (int i = 0; i < _board.GetLength(0); i++)
         {
-            Console.Write($"{i + 1}행 ");
+            Console.Write($"{$"{i + 1}행" , 2} ");
 
             for (int j = 0; j < _board.GetLength(1); j++)
             {
@@ -137,11 +152,11 @@ class Board
 
     public void PrintBoard()
     {
-        Console.WriteLine("    1열 2열 3열 4열");
-        
+        Console.WriteLine($"{" ", 4}{"1열", 3}{"2열", 3}{"3열", 3}{"4열", 3}");
+
         for (int i = 0; i < _board.GetLength(0); i++)
         {
-            Console.Write($"{i + 1}행 ");
+            Console.Write($"{$"{i + 1}행", 2} ");
 
             for (int j = 0; j < _board.GetLength(1); j++)
             {

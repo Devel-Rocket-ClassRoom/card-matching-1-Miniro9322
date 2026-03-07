@@ -30,25 +30,25 @@ class Card
         if(TempHidden == false)
         {
             Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), _color);
-            Console.Write($" [{Text}] ");
+            Console.Write($"{$"[{Text}]", 4}");
             Console.ResetColor();
         }
         else if (IsHidden == false)
         {
             Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), _color);
-            Console.Write($" {Text} ");
+            Console.Write($"{$"{Text}", 4}");
             Console.ResetColor();
         }
         else
         {
-            Console.Write(" ** ");
+            Console.Write($"{"**", 4}");
         }
     }
 
     public void ShowCard()
     {
         Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), _color);
-        Console.Write($" {Text} ");
+        Console.Write($"{Text , 4}");
         Console.ResetColor();
     }
 }
