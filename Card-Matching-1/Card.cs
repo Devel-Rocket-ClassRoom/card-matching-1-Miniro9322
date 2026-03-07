@@ -15,12 +15,13 @@ class Card
         if (num < 'A')
         {
             Text = num.ToString();
+            _color = "White";
         }
         else
         {
             Text = ((char)num).ToString();
+            _color = color;
         }
-        _color = color;
         IsHidden = true;
         TempHidden = true;
     }
