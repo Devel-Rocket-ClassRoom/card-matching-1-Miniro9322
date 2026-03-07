@@ -4,7 +4,6 @@ using System.Threading;
 class CardMatching
 {
     private Board _board;
-    private int _tryCount = 0;
     private int foundedSet = 0;
     private Difficulty _difficulty;
     private CardSkin _skin;
@@ -13,6 +12,8 @@ class CardMatching
     private bool isClear;
     private int _waiting;
     private string _gameOverMessage;
+    private string _gameClearMessage;
+
 
     public bool Start()
     {
@@ -39,7 +40,8 @@ class CardMatching
         if(isClear == true)
         {
             Console.WriteLine("=== 게임 클리어! ===");
-            Console.WriteLine($"총 시도 횟수: {_tryCount}\n");
+            Console.WriteLine(_gameClearMessage);
+            Console.WriteLine();
         }
         else
         {
@@ -126,6 +128,7 @@ class CardMatching
             if (foundedSet == _board.TotalSet)
             {
                 isClear = true;
+                _gameClearMessage = string.Empty;
                 break;
             }
 
@@ -197,7 +200,6 @@ class CardMatching
             else
             {
                 Console.WriteLine("짝이 맞지 않습니다!\n");
-                _tryCount++;
             }
 
             passedTime = (int)(DateTime.Now - startTime).TotalSeconds;
@@ -211,6 +213,7 @@ class CardMatching
             if (foundedSet == _board.TotalSet)
             {
                 isClear = true;
+                _gameClearMessage = $"클리어 시간: {passedTime}";
                 break;
             }
 
@@ -222,7 +225,7 @@ class CardMatching
     private void Classic()
     {
         int maxTry = 0;
-
+        int tryCount = 0;
         switch (_difficulty)
         {
             case Difficulty.Easy:
@@ -253,7 +256,7 @@ class CardMatching
         while (true)
         {
             _board.PrintBoard();
-            Console.WriteLine($"\n시도 횟수: {_tryCount}/{maxTry} | 찾은 쌍: {foundedSet}/{_board.TotalSet}\n");
+            Console.WriteLine($"\n시도 횟수: {tryCount}/{maxTry} | 찾은 쌍: {foundedSet}/{_board.TotalSet}\n");
 
             do
             {
@@ -274,25 +277,26 @@ class CardMatching
             if (_board.CompareCard())
             {
                 Console.WriteLine("짝을 찾았습니다!\n");
-                _tryCount++;
+                tryCount++;
                 foundedSet++;
             }
             else
             {
                 Console.WriteLine("짝이 맞지 않습니다!\n");
-                _tryCount++;
+                tryCount++;
             }
 
-            if (_tryCount == maxTry)
+            if (tryCount == maxTry)
             {
                 isClear = false;
+                _gameOverMessage = "시도 횟수를 모두 사용했습니다.";
                 break;
             }
 
             if (foundedSet == _board.TotalSet)
             {
                 isClear = true;
-                _gameOverMessage = "시도 횟수를 모두 사용했습니다.";
+                _gameClearMessage = $"총 시도 횟수: {tryCount}";
                 break;
             }
 
@@ -403,6 +407,8 @@ class CardMatching
         if (newGame == "Y")
         {
             _board.Reset();
+            isClear = false;
+            foundedSet = 0;
             Console.Clear();
             Console.WriteLine("=== 새 게임 ===\n");
             return true;
