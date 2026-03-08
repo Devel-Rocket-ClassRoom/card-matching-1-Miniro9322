@@ -1,42 +1,90 @@
 ﻿using System;
 using System.Threading;
 
-class CardMatching
+abstract class GameBase
 {
-    private Board _board;
-    private Difficulty _difficulty;
-    private CardSkin _skin;
-    private GameMode _mode;
+    protected Board _board;
+    protected bool _isWrong;
+    protected bool _isGameOver;
+    protected string _gameOverMessage;
+    protected string _gameClearMessage;
+    protected int _foundSet = 0;
+    protected int _waiting;
+    protected bool _isGameClear;
 
+    protected abstract bool IsGameOver();
+    protected abstract string GetStatusText();
+    protected abstract void CardCompare();
 
-    public bool Start()
+    public void Play()
     {
-        _difficulty = SelectDifficulty();
-        Console.WriteLine();
-        _skin = SelectCardSkin();
-        Console.WriteLine();
-        _mode = SelectGameMode();
-        Console.Clear();
-
-        switch (_mode)
+        while (IsGameOver() == false)
         {
-            case GameMode.Classic:
-                GameBase classic = new Classic(_difficulty, _skin);
-                classic.Play();
-                break;
-            case GameMode.TimeAttack:
-                GameBase timeAttack = new TimeAttack(_difficulty, _skin);
-                timeAttack.Play();
-                break;
-            case GameMode.Survival:
-                GameBase survival = new Survival(_difficulty, _skin);
-                survival.Play();
-                break;
+            _board.PrintBoard();
+            Console.WriteLine(GetStatusText());
+
+            do
+            {
+                Console.Write($"첫 번째 카드를 선택하세요 (행 열): ");
+                _isWrong = OpenCard(0);
+            } while (_isWrong == true);
+            Console.Clear();
+            _board.PrintBoard();
+
+            do
+            {
+                Console.Write($"두 번째 카드를 선택하세요 (행 열): ");
+                _isWrong = OpenCard(1);
+            } while (_isWrong == true);
+            Console.Clear();
+            _board.PrintBoard();
+
+            CardCompare();
+            
+            Thread.Sleep(1000);
+            Console.Clear();
         }
 
-        Console.Write("새 게임을 하시겠습니까? (Y/N): ");
+        if (_isGameClear == false)
+        {
+            Console.WriteLine("=== 게임 오버! ===");
+            _board.PrintBoard();
+            Console.WriteLine(_gameOverMessage);
+            Console.WriteLine($"찾은 쌍: {_foundSet}/{_board.TotalSet}\n");
+        }
+        else
+        {
+            Console.WriteLine("=== 게임 클리어! ===");
+            _board.PrintBoard();
+            Console.WriteLine(_gameClearMessage);
+            Console.WriteLine();
+        }
 
-        return CheckNewGame();
+        _board.Reset();
+    }
+
+    private bool OpenCard(int num)
+    {
+        char[] temp = { ' ' };
+        string open = Console.ReadLine();
+        string[] openNum = open.Trim().Split(temp, StringSplitOptions.RemoveEmptyEntries);
+        if (openNum.Length < 2)
+        {
+            Console.WriteLine("잘못된 값이 입력되었습니다. 다시 입력해주시기 바랍니다.");
+            Console.WriteLine();
+            return true;
+        }
+        int x = Convert.ToInt32(openNum[0].Trim()) - 1;
+        int y = Convert.ToInt32(openNum[1].Trim()) - 1;
+        switch (num)
+        {
+            case 0:
+                return _board.OpenCard1(x, y);
+            case 1:
+                return _board.OpenCard2(x, y);
+            default:
+                return false;
+        }
     }
 
     public Difficulty SelectDifficulty()
@@ -116,6 +164,7 @@ class CardMatching
 
         if (newGame == "Y")
         {
+            _board.Reset();
             Console.Clear();
             Console.WriteLine("=== 새 게임 ===\n");
             return true;
