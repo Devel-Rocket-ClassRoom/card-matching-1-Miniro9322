@@ -7,8 +7,7 @@ class Card
     public bool TempHidden;
     public static int CardCount = 0;
     public static int Num;
-    public static int ColorNum;
-    public string _color;
+    private string _color;
 
     public Card(int num, string color)
     {
