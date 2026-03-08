@@ -6,6 +6,7 @@ class Board
     private Card _openCard1;
     private Card _openCard2;
     public readonly int TotalSet;
+    private int _makedCard = 0;
 
     public Board(Difficulty difficulty, CardSkin cardSkin)
     {
@@ -23,46 +24,54 @@ class Board
         }
     }
 
-    public void Reset()
-    {
-        Card.Num = 0;
-        Card.CardCount = 0;
-    }
-
     public int CreateBoard(int  length, int width, CardSkin skin)
     {
         Random rand = new Random();
         _board = new Card[length, width];
-        int num = 0;
-        int count = 0;
         int colorNum = 0;
         string color;
 
         switch (skin)
         {
             case CardSkin.Number:
-                num = 0;
+                for (int i = 0; i < _board.GetLength(0); i++)
+                {
+                    for (int j = 0; j < _board.GetLength(1); j++)
+                    {
+                        _board[i, j] = new NumCard(_makedCard++);
+                    }
+                }
                 break;
             case CardSkin.Alphabet:
-                num = 'A' - 1;
+                for (int i = 0; i < _board.GetLength(0); i++)
+                {
+                    for (int j = 0; j < _board.GetLength(1); j++)
+                    {
+                        if ((_makedCard) % 2 == 0)
+                        {
+                            colorNum = rand.Next(15);
+                        }
+                        color = ((Color)colorNum).ToString();
+                        _board[i, j] = new AlphabetCard(_makedCard++, color);
+                    }
+                }
                 break;
             case CardSkin.Sign:
-                num = '\u25A0' - 1;
+                for (int i = 0; i < _board.GetLength(0); i++)
+                {
+                    for (int j = 0; j < _board.GetLength(1); j++)
+                    {
+                        if ((_makedCard) % 2 == 0)
+                        {
+                            colorNum = rand.Next(15);
+                        }
+                        color = ((Color)colorNum).ToString();
+                        _board[i, j] = new SignCard(_makedCard++, color);
+                    }
+                }
                 break;
         }
-        for (int i = 0; i < _board.GetLength(0); i++)
-        {
-            for (int j = 0; j < _board.GetLength(1); j++)
-            {
-                if ((count++) % 2 == 0)
-                {
-                    colorNum = rand.Next(15);
-                    num++;
-                }
-                color = ((Color)colorNum).ToString();
-                _board[i, j] = new Card(num, color);
-            }
-        }
+        
 
         return length * width / 2;
     }

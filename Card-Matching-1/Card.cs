@@ -1,26 +1,16 @@
 ﻿using System;
+using System.Drawing;
 
 class Card
 {
     public string Text;
     public bool IsHidden;
     public bool TempHidden;
-    public static int CardCount = 0;
-    public static int Num;
     private string _color;
 
-    public Card(int num, string color)
+    public Card(string color)
     {
-        if (num < 'A')
-        {
-            Text = num.ToString();
-            _color = "White";
-        }
-        else
-        {
-            Text = ((char)num).ToString();
-            _color = color;
-        }
+        _color = color;
         IsHidden = true;
         TempHidden = true;
     }

@@ -59,8 +59,6 @@ abstract class GameBase
             Console.WriteLine(_gameClearMessage);
             Console.WriteLine();
         }
-
-        _board.Reset();
     }
 
     private bool OpenCard(int num)
@@ -164,7 +162,6 @@ abstract class GameBase
 
         if (newGame == "Y")
         {
-            _board.Reset();
             Console.Clear();
             Console.WriteLine("=== 새 게임 ===\n");
             return true;
