@@ -3,7 +3,6 @@ using System.Threading;
 
 class CardMatching
 {
-    private Board _board;
     private Difficulty _difficulty;
     private CardSkin _skin;
     private GameMode _mode;
