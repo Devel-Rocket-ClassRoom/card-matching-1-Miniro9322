@@ -54,7 +54,7 @@ class TimeAttack : GameBase
 
     protected override string GetStatusText()
     {
-        return $"\n경과 시간: {_passedTime}초/{_maxTime}초 | 찾은 쌍: {_passedTime}/{_board.TotalSet}\n";
+        return $"\n경과 시간: {_passedTime}초/{_maxTime}초 | 찾은 쌍: {_foundSet}/{_board.TotalSet}\n";
     }
 
     protected override bool IsGameOver()
